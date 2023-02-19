@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "casbin": "^5.24.1",
+    "csv-parser": "^3.0.0",
+    "node-csv": "^0.1.2",
+    "web3": "^1.8.2"
+  }
+}
