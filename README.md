@@ -3,16 +3,17 @@ app
 
 ## 路由和请求
 ### 用户
-1. login  登录
-2. login up 注册
-3. logout 退出登录
+1. login(username, password) bool  登录
+2. loginUp(username, password, readRole, writeRole) 注册
+3. getUserInfo(username) 获取用户信息
+4. getUserList() 获取用户列表
 
 ### 控制
-1. addDevice  添加设备   对应操作 write
-2. deleteDevice 删除设备 对应操作 write
-3. updateDevice 更新设备 对应操作 write
-4. getDeviceInfo 获取设备信息 对应操作 read
-5. getDeviceList 获取设备列表 对应操作 read
+1. addDevice(name)  添加设备   对应操作 write
+2. deleteDevice(name) 删除设备 对应操作 write
+3. updateDevice(name, state) 更新设备 对应操作 write
+4. getDeviceInfo(name) 获取设备信息 对应操作 read
+5. getDeviceList() 获取设备列表 对应操作 read
 
 ## 表单
 ### 用户
