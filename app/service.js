@@ -1,13 +1,26 @@
 const dao = require('./dao');
 
+module.exports = {
+    loginUp: loginUp,
+    login: login,
+    getUserInfo: getUserInfo,
+    getUserList: getUserList,
+
+    addDevice: addDevice,
+    deleteDevice: deleteDevice,
+    updateDevice: updateDevice,
+    getDeviceInfo: getDeviceInfo,
+    getDeviceList: getDeviceList
+}
+
 function loginUp(username, password, readRole, writeRole) {
-    const user = new User(username, password, readRole, writeRole);
+    const user = new dao.User(username, password, readRole, writeRole);
     dao.createUser(user);
 }
 
-function login(username, password) {
-    const user = dao.getUser(username);
-    if (user.password === password) {
+async function login(username, password) {
+    const user = await dao.getUserInfo(username);
+    if (user[0].password == password) {
         return true;
     } else {
         return false;
@@ -15,7 +28,8 @@ function login(username, password) {
 }
 
 async function getUserInfo(username) {
-    const user = await dao.getUser(username);
+    const user = await dao.getUserInfo(username);
+    console.log("user", user);
     return user;
 }
 
@@ -25,23 +39,23 @@ async function getUserList() {
 }
 
 function addDevice(name, state, power) {
-    const device = new Device(name, state, power);
+    const device = new dao.Device(name, state, power);
     dao.createDevice(device);
 }
 
-function delectDevice(name) {
+function deleteDevice(name) {
     dao.deleteDevice(name);
 }
 
 function updateDevice(name, state) {
-    let device = dao.getDevice(name);
+    let device = dao.getDeviceInfo(name);
     device.name = name;
     device.state = state;
     dao.updateDevice(device);
 }
 
 async function getDeviceInfo(name) {
-    const device = await dao.getDevice(name);
+    const device = await dao.getDeviceInfo(name);
     return device;
 }
 

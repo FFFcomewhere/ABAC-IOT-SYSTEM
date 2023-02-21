@@ -25,15 +25,18 @@ class Device {
 
 
 module.exports = {
+    User: User,
+    Device: Device,
+
     init: init,
     createUser: createUser,
-    getUser: getUser,
+    getUserInfo: getUserInfo,
     getUserList: getUserList,
     updateUser: updateUser,
     deleteUser: deleteUser,
 
     createDevice: createDevice,
-    getDevice: getDevice,
+    getDeviceInfo: getDeviceInfo,
     getDeviceList: getDeviceList,
     updateDevice: updateDevice,
     deleteDevice: deleteDevice,
@@ -61,11 +64,10 @@ function createUser(user) {
             console.error('Failed to insert user:', err);
             return;
         }
-        console.log('Inserted user:', result);
     });
 }
 
-async function getUser(username) {
+async function getUserInfo(username) {
     const sql = `SELECT * FROM user WHERE username = ?`;
     const value = [username];
 
@@ -76,7 +78,6 @@ async function getUser(username) {
                     console.error('Failed to get user:', err);
                     reject(err);
                 }
-                console.log('Got user:', result);
                 resolve(result);
             });
         });
@@ -98,7 +99,6 @@ async function getUserList() {
                     console.error('Failed to get user:', err);
                     reject(err);
                 }
-                console.log('Got user:', result);
                 resolve(result);
             });
         });
@@ -130,7 +130,6 @@ function deleteUser(username) {
             console.error('Failed to delect user:', err);
             return;
         }
-        console.log('Delected user:', result);
     });
 }
 
@@ -143,11 +142,10 @@ function createDevice(device) {
             console.error('Failed to create user:', err);
             return;
         }
-        console.log('Createted user:', result);
     });
 }
 
-async function getDevice(name) {
+async function getDeviceInfo(name) {
     const sql = `SELECT * FROM device WHERE name = ?`;
     const value = [name];
 
@@ -158,7 +156,6 @@ async function getDevice(name) {
                     console.error('Failed to get user:', err);
                     reject(err);
                 }
-                console.log('Got user:', result);
                 resolve(result);
             });
         });
@@ -179,7 +176,6 @@ async function getDeviceList() {
                     console.error('Failed to get user:', err);
                     reject(err);
                 }
-                console.log('Got user:', result);
                 resolve(result);
             });
         });
@@ -199,7 +195,6 @@ function updateDevice(device) {
             console.error('Failed to update user:', err);
             return;
         }
-        console.log('Updated user:', result);
     });
 }
 
@@ -211,7 +206,6 @@ function deleteDevice(name) {
             console.error('Failed to Delete user:', err);
             return;
         }
-        console.log('Deleted user:', result);
     });
 }
 
