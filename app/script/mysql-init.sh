@@ -9,3 +9,6 @@ use base1;
 source  /home/sql/user.sql;
 
 source  /home/sql/device.sql;
+
+source /home/sql/policy.sql;
+

@@ -4,16 +4,23 @@ app
 ## 路由和请求
 ### 用户
 1. login(username, password) bool  登录
-2. loginUp(username, password, readRole, writeRole) 注册
+2. loginUp(username, password, role) 注册 root/member
 3. getUserInfo(username) 获取用户信息
 4. getUserList() 获取用户列表
 
-### 控制
+### 设备
 1. addDevice(name)  添加设备   对应操作 write
 2. deleteDevice(name) 删除设备 对应操作 write
 3. updateDevice(name, state) 更新设备 对应操作 write
 4. getDeviceInfo(name) 获取设备信息 对应操作 read
 5. getDeviceList() 获取设备列表 对应操作 read
+
+### 策略
+1. addPolicy(role, deviceName, policy) 添加策略 
+2. deletePolicy(role, deviceName, policy) 删除策略
+3. getPolicyInfo(role, deviceName) 获取策略
+4. getPolicyList() 获取策略列表
+
 
 ## 表单
 ### 用户
