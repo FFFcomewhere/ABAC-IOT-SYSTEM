@@ -9,7 +9,8 @@ app
 4. getUserList() 获取用户列表
 
 ### 设备
-1. addDevice(name)  添加设备   对应操作 write
+默认 root 拥有所有设备的读写权限 member 拥有所有设备的读权限
+1. addDevice(name, state, power)  添加设备   对应操作 write
 2. deleteDevice(name) 删除设备 对应操作 write
 3. updateDevice(name, state) 更新设备 对应操作 write
 4. getDeviceInfo(name) 获取设备信息 对应操作 read

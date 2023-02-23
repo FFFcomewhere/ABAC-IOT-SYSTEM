@@ -2,10 +2,16 @@ const pathPolicy = "./config/policy.csv";
 const pathModel = "./config/model.conf";
 const { newEnforcer } = require('casbin');
 const { SequelizeAdapter } = require('casbin-sequelize-adapter');
+let adapter;
+let enforcer;
 
+module.exports = {
+    init: init,
+    abac: abac,
+}
 
-const abac = async (sub, obj, act) => {
-    const adapter = await SequelizeAdapter.newAdapter({
+async function init() {
+    adapter = await SequelizeAdapter.newAdapter({
         dialect: 'mysql',
         host: 'localhost',
         username: 'root',
@@ -16,10 +22,13 @@ const abac = async (sub, obj, act) => {
     },
         true,
     );
-    const enforcer = await newEnforcer(pathModel, adapter);
+    enforcer = await newEnforcer(pathModel, adapter);
+}
 
+
+async function abac(sub, obj, act) {
+    const enforcer = await newEnforcer(pathModel, adapter);
     const res = await enforcer.enforce(sub, obj, act);
-    console.log("res ", res);
     return res;
 }
 

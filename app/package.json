@@ -4,6 +4,7 @@
     "casbin-basic-adapter": "^0.1.0",
     "casbin-sequelize-adapter": "^2.5.0",
     "csv-parser": "^3.0.0",
+    "jsonwebtoken": "^9.0.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "node-csv": "^0.1.2",

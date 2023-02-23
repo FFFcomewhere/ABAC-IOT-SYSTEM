@@ -134,7 +134,6 @@ function updateUser(user) {
             console.error('Failed to update user:', err);
             return;
         }
-        console.log('Updated user:', result);
     });
 }
 
@@ -292,10 +291,10 @@ function deletePolicy(policy) {
 
 async function userTest() {
     //创建用户
-    let user1 = new User("user1", "password", "1", "1");
+    let user1 = new User("user1", "password", "root");
     createUser(user1);
 
-    let user2 = new User("user2", "password", "1", "1");
+    let user2 = new User("user2", "password", "member");
     createUser(user2);
 
     //获取用户
@@ -344,6 +343,6 @@ async function policyTest() {
     //deletePolicy("root", "TV", "write");
 }
 
-// userTest();
+//userTest();
 // deviceTest();
 // policyTest();

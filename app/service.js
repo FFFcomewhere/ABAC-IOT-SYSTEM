@@ -1,6 +1,10 @@
 const dao = require('./dao');
+const accessCtl = require('./abac');
+const auth = require('./auth');
 
 module.exports = {
+    init: init,
+
     loginUp: loginUp,
     login: login,
     getUserInfo: getUserInfo,
@@ -10,26 +14,37 @@ module.exports = {
     deleteDevice: deleteDevice,
     updateDevice: updateDevice,
     getDeviceInfo: getDeviceInfo,
-    getDeviceList: getDeviceList
+    getDeviceList: getDeviceList,
+
+    addPolicy: addPolicy,
+    deletePolicy: deletePolicy,
+    getPolicyInfo: getPolicyInfo,
+    getPolicyList: getPolicyList
 }
 
-function loginUp(username, password, readRole, writeRole) {
-    const user = new dao.User(username, password, readRole, writeRole);
+async function init() {
+    await dao.init();
+    await accessCtl.init();
+}
+
+function loginUp(username, password, role) {
+    const user = new dao.User(username, password, role);
     dao.createUser(user);
 }
 
 async function login(username, password) {
     const user = await dao.getUserInfo(username);
+    if (user.length == 0) {
+        return null;
+    }
     if (user[0].password == password) {
-        return true;
-    } else {
-        return false;
+        const token = auth.generateToken(user[0].username, user[0].role);
+        return token;
     }
 }
 
 async function getUserInfo(username) {
     const user = await dao.getUserInfo(username);
-    console.log("user", user);
     return user;
 }
 
@@ -63,5 +78,26 @@ async function getDeviceList() {
     const deviceList = await dao.getDeviceList();
     return deviceList;
 }
+
+function addPolicy(role, deviceName, operation) {
+    const policy = new dao.Policy(role, deviceName, operation);
+    dao.createPolicy(policy);
+}
+
+function deletePolicy(role, deviceName) {
+    dao.deletePolicy(role, deviceName);
+}
+
+async function getPolicyInfo(role, deviceName) {
+    const policy = await dao.getPolicyInfo(role, deviceName);
+    return policy;
+}
+
+async function getPolicyList() {
+    const policyList = await dao.getPolicyList();
+    return policyList;
+}
+
+
 
 

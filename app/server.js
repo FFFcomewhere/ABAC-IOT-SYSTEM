@@ -1,14 +1,24 @@
 const express = require('express');
+const { authenticateToken } = require('./auth');
+const router = express.Router();
+const auth = require("./auth");
 const app = express();
 const port = 8001;
-const dao = require('./dao');
 const service = require('./service');
+const accessCtl = require('./abac');
+
+const errorWithoutPermission = "errorWithoutPermission";
+const errorWrongPassword = "errorWrongPassword";
+
+module.exports = {
+    server: server
+}
+
+//路由设置
+app.use(express.json());
 
 async function server() {
-    await dao.init();
-    // dao.userTest();
-    // dao.deviceTest();
-    app.use(express.json());
+    await service.init();
 
     app.get('/', (req, res) => {
         res.send('Hello World!')
@@ -16,7 +26,7 @@ async function server() {
 
     //User
     app.post('/loginUp', async (req, res) => {
-        service.loginUp(req.body.username, req.body.password, req.body.readRole, req.body.writeRole);
+        service.loginUp(req.body.username, req.body.password, req.body.role);
         res.end();
     })
 
@@ -25,43 +35,100 @@ async function server() {
         res.json(result);
     })
 
-    app.post('/getUserInfo', async (req, res) => {
+    app.post('/getUserInfo', auth.authenticateToken, async (req, res) => {
+        if (req.user.username != req.body.username) {
+            res.status(400).send({ error: errorWrongPassword });
+        }
         const result = await service.getUserInfo(req.body.username);
         res.json(result);
     })
 
-    app.get('/getUserList', async (req, res) => {
+    app.get('/getUserList', auth.authenticateToken, async (req, res) => {
+        if (req.user.role != "root") {
+            res.status(400).send({ error: errorWithoutPermission });
+        }
         const result = await service.getUserList();
         res.json(result);
     })
 
     //Device
-    app.post('/addDevice', async (req, res) => {
+    app.post('/addDevice', auth.authenticateToken, async (req, res) => {
         service.addDevice(req.body.name, req.body.state, req.body.power);
-        res.end();
+        if (req.user && req.user.role == "root") {
+            service.addPolicy(req.user.role, req.body.name, "write");
+        }
+        service.addPolicy(req.user.role, req.body.name, "read");
+        res.status(200).end();
     })
 
-    app.post('/deleteDevice', async (req, res) => {
+    app.post('/deleteDevice', auth.authenticateToken, async (req, res) => {
+        if (!accessCtl.abac(req.user.role, req.body.name, 'write')) {
+            res.status(400).send({ error: errorWithoutPermission });
+        }
         service.deleteDevice(req.body.name);
-        res.end();
+        res.status(200).end();
     })
 
-    app.post('/updateDevice', async (req, res) => {
+    app.post('/updateDevice', auth.authenticateToken, async (req, res) => {
+        if (!accessCtl.abac(req.user.role, req.body.name, 'write')) {
+            res.status(400).send({ error: errorWithoutPermission });
+        }
         service.updateDevice(req.body.name, req.body.state);
-        res.end();
+        res.status(200).end();
     })
 
-    app.post('/getDeviceInfo', async (req, res) => {
+    app.post('/getDeviceInfo', auth.authenticateToken, async (req, res) => {
+        if (!accessCtl.abac(req.user.role, req.body.name, 'read')) {
+            res.status(400).send({ error: errorWithoutPermission });
+        }
         const result = await service.getDeviceInfo(req.body.name);
         res.json(result);
     })
 
-    app.get('/getDeviceList', async (req, res) => {
+    app.get('/getDeviceList', auth.authenticateToken, async (req, res) => {
+        if (!accessCtl.abac(req.user.role, req.body.name, 'read')) {
+            res.status(400).send({ error: errorWithoutPermission });
+        }
         const result = await service.getDeviceList();
         res.json(result);
     })
+
+    //Policy
+    app.post('/addPolicy', auth.authenticateToken, async (req, res) => {
+        //非root用户无权限
+        if (req.user && req.user.role != "root") {
+            res.status(400).send({ error: errorWithoutPermission });
+        }
+        service.addPolicy(req.body.role, req.body.deviceName, req.body.policy);
+        res.status(200).end();
+    })
+
+    app.post('/deletePolicy', auth.authenticateToken, async (req, res) => {
+        //非root用户无权限
+        if (req.user && req.user.role != "root") {
+            res.status(400).send({ error: errorWithoutPermission });
+        }
+        service.deletePolicy(req.body.role, req.body.deviceName);
+        res.end();
+    })
+
+    app.post('/getPolicyInfo', auth.authenticateToken, async (req, res) => {
+        const result = await service.getPolicyInfo(req.body.role, req.body.deviceName);
+        res.json(result);
+    })
+
+    app.get('/getPolicyList', auth.authenticateToken, async (req, res) => {
+        if (req.user && req.user.role != "root") {
+            res.status(400).send({ error: errorWithoutPermission });
+        }
+        const result = await service.getPolicyList();
+        res.json(result);
+    })
+
 
     app.listen(port, () => {
         console.log(`App listening on port ${port}`)
     })
 }
+
+server();
