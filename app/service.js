@@ -1,6 +1,7 @@
 const dao = require('./dao');
 const accessCtl = require('./abac');
 const auth = require('./auth');
+const server = require('./server');
 
 module.exports = {
     init: init,
@@ -101,3 +102,5 @@ async function getPolicyList() {
 
 
 
+
+//server();

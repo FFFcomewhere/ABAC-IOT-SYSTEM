@@ -42,11 +42,18 @@ app
 3. owner 合约拥有者 
 
 ## 方法
-1. setPolicy 更新属性并取hash
-2. getPolicy 获取属性
-3. getPolicyHash 获取属性hash
+注意，这里的policy的格式为role deviceName operator deleted_flag
+1. addPolicy 更新属性并取hash
+2. getPolicyRoot 获取属性凭证
+
+
 
 ## 配置
 1. 网络 目前使用的是ganache网络，网络位于windows系统下，端口为8545，ip为172.25.144.1
 2. mysql name:iot password:passowrd
  docker run -p 3306:3306 --name iot-mysql -v ~/code/solidity/Web3Demo/demo1/ABAC-IOT-SYSTEM/app/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=password  -d mysql:5.7
+
+
+## 部署与启动合约
+1. truffle migrate 
+2. truffle 

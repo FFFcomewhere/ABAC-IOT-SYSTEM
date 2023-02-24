@@ -1,28 +1,24 @@
 pragma solidity ^0.8.17;
 
+import "merkle-patricia-tree/contracts/MerklePatriciaProof.sol";
+
 contract Attributes {
-    string public policy;
-    bytes32 public hashPolicy;
+    bytes32[] public policyTree;
+    mapping(bytes32 => bool) public policyExists;
+    uint256 public policyCount;
 
-    constructor(string memory initPolicy) {
-        policy = initPolicy;
-        hashPolicy = hash(policy);
+    constructor() {}
+
+    function addPolicy(string memory policy) public {
+        bytes32 policyHash = keccak256(bytes(policy));
+        require(!policyExists[policyHash], "Policy already exists");
+
+        policyExists[policyHash] = true;
+        policyTree.push(policyHash);
+        policyCount++;
     }
 
-    function setPolicy(string memory newPolicy) public payable {
-        policy = newPolicy;
-        hashPolicy = hash(policy);
-    }
-
-    function getPolicy() public view returns (string memory) {
-        return policy;
-    }
-
-    function getHashPolicy() public view returns (bytes32) {
-        return hashPolicy;
-    }
-
-    function hash(string memory message) public pure returns (bytes32) {
-        return keccak256(abi.encodePacked(message));
+    function getPolicyRoot() public view returns (bytes32) {
+        return MerklePatriciaProof.getMerkleRoot(policyTree);
     }
 }

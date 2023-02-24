@@ -2,8 +2,12 @@ const pathPolicy = "./config/policy.csv";
 const pathModel = "./config/model.conf";
 const { newEnforcer } = require('casbin');
 const { SequelizeAdapter } = require('casbin-sequelize-adapter');
+const level = require('level');
+
+
 let adapter;
 let enforcer;
+
 
 module.exports = {
     init: init,
@@ -31,6 +35,7 @@ async function abac(sub, obj, act) {
     const res = await enforcer.enforce(sub, obj, act);
     return res;
 }
+
 
 
 const abacTest = async () => {
