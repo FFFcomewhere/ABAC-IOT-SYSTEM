@@ -7,9 +7,6 @@ module.exports = {
     authenticateToken: authenticateToken
 }
 
-
-
-
 //生成jwt
 function generateToken(username, role) {
     const payload = {

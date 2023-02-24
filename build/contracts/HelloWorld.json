@@ -23,7 +23,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -36,7 +37,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -49,7 +51,8 @@
       "name": "setMessage",
       "outputs": [],
       "stateMutability": "payable",
-      "type": "function"
+      "type": "function",
+      "payable": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"string\",\"name\":\"initMessage\",\"type\":\"string\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"hello\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"message\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"newMessage\",\"type\":\"string\"}],\"name\":\"setMessage\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/HelloWorld.sol\":\"HelloWorld\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/HelloWorld.sol\":{\"keccak256\":\"0xba067f014b7afa6c466401dad37ce5dd365790e6d8b80d33cf0853fe4aa2c5a2\",\"urls\":[\"bzz-raw://1fc9baee4666603ad9d95eb55e47076547b700755d6d9073e42a15c9f45b80b9\",\"dweb:/ipfs/QmQhbmvY25viez7LpPrgNfqcjh69W5361DPye61te2u4Zz\"]}},\"version\":1}",
@@ -10501,8 +10504,8 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x342746a11BF4EF04bB461E25c134603beb972DDF",
-      "transactionHash": "0x2e369cf7090ce1ab2a2199f00e9affcfe42c0fa18cca2afbb6d96871e1f34a6c"
+      "address": "0x7EB65255841684173516D9BFEbfA1FE40B433a3E",
+      "transactionHash": "0xb2228c2e4e726fb308a796d8157fdfc4f63b57bbd3d958e224729887dde7ee9f"
     },
     "1676787806688": {
       "events": {},
@@ -10512,7 +10515,8 @@
     }
   },
   "schemaVersion": "3.4.11",
-  "updatedAt": "2023-02-23T11:17:24.145Z",
+  "updatedAt": "2023-02-24T10:09:57.991Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

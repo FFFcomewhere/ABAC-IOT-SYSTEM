@@ -7,5 +7,5 @@ module.exports = function (deployer) {
   deployer.link(ConvertLib, HelloWorld);
   deployer.deploy(HelloWorld, "Hello World constructor!");
   deployer.link(ConvertLib, Attributes);
-  deployer.deploy(Attributes, "p, alice, data1, read \n p, bob, data2, write");
+  deployer.deploy(Attributes);
 };

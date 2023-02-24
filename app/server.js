@@ -5,7 +5,7 @@ const auth = require("./auth");
 const app = express();
 const port = 8001;
 const service = require('./service');
-const accessCtl = require('./abac');
+const accessCtl = require('./accessCtl');
 
 const errorWithoutPermission = "errorWithoutPermission";
 const errorWrongPassword = "errorWrongPassword";
@@ -13,6 +13,7 @@ const errorWrongPassword = "errorWrongPassword";
 module.exports = {
     server: server
 }
+
 
 //路由设置
 app.use(express.json());
@@ -38,6 +39,7 @@ async function server() {
     app.post('/getUserInfo', auth.authenticateToken, async (req, res) => {
         if (req.user.username != req.body.username) {
             res.status(400).send({ error: errorWrongPassword });
+            return;
         }
         const result = await service.getUserInfo(req.body.username);
         res.json(result);
@@ -62,7 +64,7 @@ async function server() {
     })
 
     app.post('/deleteDevice', auth.authenticateToken, async (req, res) => {
-        if (!accessCtl.abac(req.user.role, req.body.name, 'write')) {
+        if (! await accessCtl.baseVerify(req.user.role, req.body.name, 'write')) {
             res.status(400).send({ error: errorWithoutPermission });
         }
         service.deleteDevice(req.body.name);
@@ -70,24 +72,27 @@ async function server() {
     })
 
     app.post('/updateDevice', auth.authenticateToken, async (req, res) => {
-        if (!accessCtl.abac(req.user.role, req.body.name, 'write')) {
-            res.status(400).send({ error: errorWithoutPermission });
+        if (! await accessCtl.baseVerify(req.user.role, req.body.name, 'write')) {
+            res.status(400).send({ error: errorWithoutPermission }).end();
+            return;
         }
         service.updateDevice(req.body.name, req.body.state);
         res.status(200).end();
     })
 
     app.post('/getDeviceInfo', auth.authenticateToken, async (req, res) => {
-        if (!accessCtl.abac(req.user.role, req.body.name, 'read')) {
-            res.status(400).send({ error: errorWithoutPermission });
+        if (! await accessCtl.baseVerify(req.user.role, req.body.name, 'read')) {
+            res.status(400).send({ error: errorWithoutPermission }).end();
+            return;
         }
         const result = await service.getDeviceInfo(req.body.name);
         res.json(result);
     })
 
     app.get('/getDeviceList', auth.authenticateToken, async (req, res) => {
-        if (!accessCtl.abac(req.user.role, req.body.name, 'read')) {
-            res.status(400).send({ error: errorWithoutPermission });
+        if (! await accessCtl.baseVerify(req.user.role, req.body.name, 'read')) {
+            res.status(400).send({ error: errorWithoutPermission }).end();
+            return;
         }
         const result = await service.getDeviceList();
         res.json(result);
@@ -97,7 +102,8 @@ async function server() {
     app.post('/addPolicy', auth.authenticateToken, async (req, res) => {
         //非root用户无权限
         if (req.user && req.user.role != "root") {
-            res.status(400).send({ error: errorWithoutPermission });
+            res.status(400).send({ error: errorWithoutPermission }).end();
+            return;
         }
         service.addPolicy(req.body.role, req.body.deviceName, req.body.policy);
         res.status(200).end();
@@ -107,6 +113,7 @@ async function server() {
         //非root用户无权限
         if (req.user && req.user.role != "root") {
             res.status(400).send({ error: errorWithoutPermission });
+            return;
         }
         service.deletePolicy(req.body.role, req.body.deviceName);
         res.end();
@@ -120,6 +127,7 @@ async function server() {
     app.get('/getPolicyList', auth.authenticateToken, async (req, res) => {
         if (req.user && req.user.role != "root") {
             res.status(400).send({ error: errorWithoutPermission });
+            return;
         }
         const result = await service.getPolicyList();
         res.json(result);
@@ -132,3 +140,4 @@ async function server() {
 }
 
 server();
+

@@ -71,7 +71,7 @@ module.exports = {
     },
 
     ganache: {  // 配置ganache网络环境
-      host: "172.25.144.1",
+      host: "192.168.31.152",
       port: 8545,
       network_id: "*" // match any network
     },
