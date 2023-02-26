@@ -152,5 +152,4 @@ async function TestAccessCtl() {
 
 
 
-TestAccessCtl();
-//queryPolicy('root', 'TV', "read");
+//TestAccessCtl();

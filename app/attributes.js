@@ -1,9 +1,9 @@
 //blockchain
 const Web3 = require('web3');
-const web3 = new Web3("http://192.168.31.152:8545");
+const web3 = new Web3("http://127.0.0.1:8545");
 const Attributes = require("../build/contracts/Attributes.json");
 let contract;
-
+let accounts;
 module.exports = {
     init: init,
     setRootHash: setRootHash,
@@ -15,21 +15,28 @@ async function init() {
     const id = await web3.eth.net.getId();
     const deployedNetwork = Attributes.networks[id];
     contract = new web3.eth.Contract(Attributes.abi, deployedNetwork.address);
+    accounts = await web3.eth.getAccounts();
+
 }
 
 async function setRootHash(hash) {
-    contract.methods.setRootHash(hash).send({ from: "0xb775F248025b42971670339cF9E22333FE925477" });;
+    console.log("accounts", accounts[0]);
+    contract.methods.setRootHash(hash).send({ from: accounts[0] });;
 }
 
 async function getRootHash() {
     return await contract.methods.getRootHash().call();
 }
 
-async function TestGetRootHash() {
+async function TestRootHash() {
     await init();
+    const hash = "1213";
+    await setRootHash(hash);
 
-    const hash = await getRootHash();
-    console.log("hash", hash);
+
+    const getHash = await getRootHash();
+    console.log("hash", getHash);
 }
 
-TestGetRootHash();
+
+//TestRootHash();
