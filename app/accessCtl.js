@@ -11,7 +11,7 @@ const { EventEmitter } = require('events');
 const { promisify } = require('util');
 const { sha3 } = require('web3-utils');
 const SqlString = require('sqlstring');
-const mysqlEvents = require('mysql-events');
+const MysqlEvents = require('mysql-events');
 
 const attributes = require('./attributes');
 
@@ -22,23 +22,16 @@ const tree = new BaseTrie(db); // 初始化MPT
 let enforcer;
 let policyWatcher;
 
-const eventEmitter = new EventEmitter();
-
 const mysqlConfig = {
     host: 'localhost',
     user: 'root',
     password: 'password',
 };
 
-const watchPolicyChanges = async () => {
-    const watcher = mysqlEvents(mysqlConfig);
-    policyWatcher = watcher.add(
-        'base1.policy',
-        (oldRow, newRow, event) => {
-            eventEmitter.emit('policyChanged');
-        },
-    );
-};
+const eventWatcher = MysqlEvents(
+    mysqlConfig,
+    { startAtEnd: true });
+
 
 module.exports = {
     init: init,
@@ -63,32 +56,40 @@ async function init() {
     enforcer = await newEnforcer(pathModel, adapter);
 
     // 加载策略到MPT中
-    await loadPolicy(enforcer);
+    await loadPolicy();
     console.log('Listening for policy changes in MySQL database...');
+    // 监听数据库变化
+    // const watcher = eventWatcher.add(
+    //     'base1.policy.*',
+    //     (oldRow, newRow, event) => {
+    //         console.log(event);
+    //         console.log(oldRow);
+    //         console.log(newRow);
+    //     },
+    // );
 
-    await watchPolicyChanges();
-    eventEmitter.on('policyChanged', async () => {
-        console.log('Detected policy changes in MySQL database. Rebuilding MPT...');
-        enforcer = await newEnforcer(pathModel, adapter);
-        await tree.clear();
-        await tree.batch(enforcer.getModel().model.getPolicy(), (batch) => {
-            enforcer.getModel().model.printPolicy();
-            enforcer.getModel().model.getPolicy().forEach((policy) => {
-                const p = `/${policy[0]}/${policy[1]}/${policy[2]}`;
-                const value = '1';
-                console.log(p, value);
-                const hash = sha3(SqlString.escape(p.join(',')));
-                batch.put(hash, value);
-            });
-        });
-        const hash = await getRootHash();
-        await attributes.setRootHash(hash);
+    // eventEmitter.on('policyChanged', async () => {
+    //     console.log('Detected policy changes in MySQL database. Rebuilding MPT...');
+    //     enforcer = await newEnforcer(pathModel, adapter);
+    //     await tree.clear();
+    //     await tree.batch(enforcer.getModel().model.getPolicy(), (batch) => {
+    //         enforcer.getModel().model.printPolicy();
+    //         enforcer.getModel().model.getPolicy().forEach((policy) => {
+    //             const p = `/${policy[0]}/${policy[1]}/${policy[2]}`;
+    //             const value = '1';
+    //             console.log(p, value);
+    //             const hash = sha3(SqlString.escape(p.join(',')));
+    //             batch.put(hash, value);
+    //         });
+    //     });
+    //     const hash = await getRootHash();
+    //     await attributes.setRootHash(hash);
 
-    });
+    // });
 }
 
 // 加载ABAC策略
-async function loadPolicy(enforcer) {
+async function loadPolicy() {
     // 加载CSV文件中的策略
     await enforcer.loadPolicy();
     const policy = await enforcer.getPolicy();
@@ -104,6 +105,10 @@ async function loadPolicy(enforcer) {
     // 存储MPT的根哈希到链上
     const hash = await getRootHash();
     await attributes.setRootHash(hash);
+}
+
+async function getPolicy() {
+    return await enforcer.getPolicy();
 }
 
 // 查询策略
@@ -129,6 +134,8 @@ async function baseVerify(role, deviceName, operator) {
     if (! await queryPolicy(role, deviceName, operator)) {
         return false;
     }
+
+    console.log("queryPolicy", await getPolicy());
 
     const hash = await getRootHash();
     const contractHash = await attributes.getRootHash();

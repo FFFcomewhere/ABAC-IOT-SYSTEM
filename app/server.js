@@ -106,6 +106,7 @@ async function server() {
             return;
         }
         service.addPolicy(req.body.role, req.body.deviceName, req.body.policy);
+        await accessCtl.loadPolicy();
         res.status(200).end();
     })
 
@@ -116,6 +117,7 @@ async function server() {
             return;
         }
         service.deletePolicy(req.body.role, req.body.deviceName);
+        await accessCtl.loadPolicy();
         res.end();
     })
 
