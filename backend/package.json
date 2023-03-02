@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "casbin": "^5.24.1",
+    "casbin-basic-adapter": "^0.1.0",
+    "casbin-sequelize-adapter": "^2.5.0",
+    "csv-parser": "^3.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "level": "^8.0.0",
+    "leveldown": "^6.1.1",
+    "levelup": "^5.1.1",
+    "merkle-patricia-tree": "^4.2.4",
+    "mysql": "^2.18.1",
+    "mysql-events": "^0.0.11",
+    "mysql2": "^2.3.3",
+    "node-csv": "^0.1.2",
+    "pkg": "^5.8.0",
+    "sequelize": "^6.28.1",
+    "web3": "^1.8.2"
+  },
+  "scripts": {
+    "start": "node main.js"
+  }
+}

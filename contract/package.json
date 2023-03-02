@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "express": "^4.18.2",
+    "merkle-patricia-tree": "^4.2.4",
+    "pkg": "^5.8.0"
+  },
+  "scripts": {
+    "start": "truffle compile && truffle migrate --network ganache",
+    "test": "truffle test"
+  }
+}

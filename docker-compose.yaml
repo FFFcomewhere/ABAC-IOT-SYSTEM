@@ -1,0 +1,55 @@
+version: "3.5"
+
+networks:
+  host:
+
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: iot-mysql
+    restart: always
+    hostname: 127.0.0.1
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=base1
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - host
+
+  ganache:
+    image: trufflesuite/ganache-cli
+    container_name: iot-ganache
+    restart: always
+    hostname: 127.0.0.1
+    ports:
+      - "8545:8545"
+    command: -h
+    networks:
+      - host
+  # myservice:
+  # backend:
+  #   container_name: iot-backend
+  #   hostname: 127.0.0.1
+  #   build:
+  #     context: .
+  #     dockerfile: app/Dockerfile
+  #   ports:
+  #     - "8001:8001"
+  #   networks:
+  #     - host
+
+  contract:
+    container_name: iot-contract
+    hostname: 127.0.0.1
+    build:
+      context: contract
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - host
