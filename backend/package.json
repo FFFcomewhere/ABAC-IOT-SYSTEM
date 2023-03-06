@@ -17,7 +17,16 @@
     "sequelize": "^6.28.1",
     "web3": "^1.8.2"
   },
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "backend",
+  "bin": "main.js",
   "scripts": {
     "start": "node main.js"
+  },
+  "pkg": {
+    "targets": [
+      "node14-linux-x64"
+    ]
   }
 }
