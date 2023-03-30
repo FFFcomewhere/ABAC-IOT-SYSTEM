@@ -3,6 +3,7 @@
     "casbin": "^5.24.1",
     "casbin-basic-adapter": "^0.1.0",
     "casbin-sequelize-adapter": "^2.5.0",
+    "cors": "^2.8.5",
     "csv-parser": "^3.0.0",
     "jsonwebtoken": "^9.0.0",
     "level": "^8.0.0",

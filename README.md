@@ -4,7 +4,7 @@ app
 ## 路由和请求
 ### 用户
 1. login(username, password) bool  登录
-2. loginUp(username, password, role) 注册 root/member
+2. register(username, password, role) 注册 root/member
 3. getUserInfo(username) 获取用户信息
 4. getUserList() 获取用户列表
 
@@ -53,7 +53,8 @@ app
 2. mysql name:iot password:passowrd
  docker run -p 3306:3306 --name iot-mysql -v ~/code/solidity/Web3Demo/demo1/ABAC-IOT-SYSTEM/app/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=password  -d mysql:5.7
 
+database name: base1
 
 ## 部署与启动合约
-1. truffle migrate 
+1. truffle migrate --network ganache
 2. truffle 

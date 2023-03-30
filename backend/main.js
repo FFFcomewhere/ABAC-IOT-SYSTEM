@@ -5,5 +5,4 @@ const main = async () => {
     server.server();
 }
 
-
 main();

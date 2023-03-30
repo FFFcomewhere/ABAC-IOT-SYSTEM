@@ -6,7 +6,7 @@ const auth = require('./auth');
 module.exports = {
     init: init,
 
-    loginUp: loginUp,
+    register: register,
     login: login,
     getUserInfo: getUserInfo,
     getUserList: getUserList,
@@ -29,7 +29,10 @@ async function init() {
     await accessCtl.init();
 }
 
-function loginUp(username, password, role) {
+function register(username, password, confirmPassword, role) {
+    if (password != confirmPassword) {
+        return;
+    }
     const user = new dao.User(username, password, role);
     dao.createUser(user);
 }

@@ -14,20 +14,36 @@ module.exports = {
     server: server
 }
 
-
 //路由设置
 app.use(express.json());
 
+const cors = require('cors');
+console.log("cors");
+app.use(cors({
+    origin: 'http://localhost:8080',
+    credentials: true,
+    optionsSuccessStatus: 200
+}))
+console.log("cors");
+
+
 async function server() {
     await service.init();
+
+    // //解决跨域问题
+    // app.use(function (req, res, next) {
+    //     res.setHeader("Access-Control-Allow-Origin", "*");
+    //     res.setHeader("Access-Control-Allow-Methods", "*");
+    //     next();
+    // });
 
     app.get('/', (req, res) => {
         res.send('Hello World!')
     })
 
     //User
-    app.post('/loginUp', async (req, res) => {
-        service.loginUp(req.body.username, req.body.password, req.body.role);
+    app.post('/register', async (req, res) => {
+        service.register(req.body.username, req.body.password, req.body.confirmPassword, req.body.role);
         res.end();
     })
 
