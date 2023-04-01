@@ -65,11 +65,14 @@
 
                 <el-dialog v-model="updateDialogVisiblePolicy" title="更新策略信息">
                     <el-form :model="policyForm" ref="policyForm" :rules="policyRules">
+                        <el-form-item label="角色" prop="role">
+                            <el-input type="text" v-model="policyForm.role"></el-input>
+                        </el-form-item>
                         <el-form-item label="设备名称" prop="deviceName">
                             <el-input type="text" v-model="policyForm.deviceName"></el-input>
                         </el-form-item>
                         <el-form-item label="操作" prop="operation">
-                            <el-input type="text" v-model="policyForm.operator"></el-input>
+                            <el-input type="text" v-model="policyForm.operation"></el-input>
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
@@ -238,6 +241,7 @@ export default {
         async updatePolicy(row) {
             this.$refs.policyForm.validate(async (valid) => {
                 if (valid) {
+                    console.log("updatePolicy ", this.policyForm);
                     const res = await policyApi.updatePolicyApi(this.policyForm);
                     ElMessage.success(res.msg);
                     this.updateDialogVisiblePolicy = false;

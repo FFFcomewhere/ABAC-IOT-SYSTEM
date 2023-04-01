@@ -56,6 +56,7 @@ module.exports = {
     deletePolicy: deletePolicy,
     getPolicyInfo: getPolicyInfo,
     getPolicyList: getPolicyList,
+    updatePolicy: updatePolicy,
 
     userTest: userTest,
     deviceTest: deviceTest,
@@ -288,6 +289,17 @@ function deletePolicy(role, deviceName, operator) {
     });
 }
 
+function updatePolicy(policy) {
+    const sql = `UPDATE policy  SET v2 = ? WHERE v0 = ? && v1 = ?`;
+    const value = [policy.operation, policy.role, policy.deviceName];
+
+    connection.query(sql, value, (err, result) => {
+        if (err) {
+            console.error('Failed to update policy:', err);
+            return;
+        }
+    });
+}
 
 async function userTest() {
     //创建用户

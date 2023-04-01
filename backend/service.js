@@ -19,6 +19,7 @@ module.exports = {
 
     addPolicy: addPolicy,
     deletePolicy: deletePolicy,
+    updatePolicy: updatePolicy,
     getPolicyInfo: getPolicyInfo,
     getPolicyList: getPolicyList
 }
@@ -69,7 +70,6 @@ function deleteDevice(name) {
 
 async function updateDevice(name, state) {
     const device = await dao.getDeviceInfo(name);
-    console.log("newdevice", device[0]);
     device[0].name = name;
     device[0].state = state;
     dao.updateDevice(device[0]);
@@ -92,6 +92,14 @@ function addPolicy(role, deviceName, operation) {
 
 function deletePolicy(role, deviceName, operation) {
     dao.deletePolicy(role, deviceName, operation);
+}
+
+async function updatePolicy(role, deviceName, operation) {
+    const policy = await dao.getPolicyInfo(role, deviceName);
+    policy[0].role = role;
+    policy[0].deviceName = deviceName;
+    policy[0].operation = operation;
+    dao.updatePolicy(policy[0]);
 }
 
 async function getPolicyInfo(role, deviceName) {

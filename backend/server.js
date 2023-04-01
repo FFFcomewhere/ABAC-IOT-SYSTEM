@@ -54,7 +54,6 @@ async function server() {
         res.json(result);
         res.status(200).end();
     })
-
     app.post('/getUserInfo', auth.authenticateToken, async (req, res) => {
         if (req.user.username != req.body.username) {
             res.status(400).send({ error: errorWrongPassword });
@@ -130,6 +129,19 @@ async function server() {
         await accessCtl.loadPolicy();
         res.status(200).end();
     })
+
+    //更新策略
+    app.post('/updatePolicy', auth.authenticateToken, async (req, res) => {
+        //非root用户无权限
+        if (req.user && req.user.role != "root") {
+            res.status(400).send({ error: errorWithoutPermission }).end();
+            return;
+        }
+        service.updatePolicy(req.body.role, req.body.deviceName, req.body.operation);
+        await accessCtl.loadPolicy();
+        res.status(200).end();
+    })
+
 
     app.post('/deletePolicy', auth.authenticateToken, async (req, res) => {
         //非root用户无权限
