@@ -90,8 +90,8 @@ function addPolicy(role, deviceName, operation) {
     dao.createPolicy(policy);
 }
 
-function deletePolicy(role, deviceName) {
-    dao.deletePolicy(role, deviceName);
+function deletePolicy(role, deviceName, operation) {
+    dao.deletePolicy(role, deviceName, operation);
 }
 
 async function getPolicyInfo(role, deviceName) {

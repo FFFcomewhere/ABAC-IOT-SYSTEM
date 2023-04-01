@@ -137,7 +137,7 @@ async function server() {
             res.status(400).send({ error: errorWithoutPermission });
             return;
         }
-        service.deletePolicy(req.body.role, req.body.deviceName);
+        service.deletePolicy(req.body.role, req.body.deviceName, req.body.operation);
         await accessCtl.loadPolicy();
         res.end();
     })

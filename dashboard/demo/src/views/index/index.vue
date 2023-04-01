@@ -203,7 +203,7 @@ export default {
 
         async deleteDevice(row) {
             console.log("deleteDevice ", row.name);
-            const res = await deviceApi.deleteDeviceApi(row.name);
+            deviceApi.deleteDeviceApi({ name: row.name });
             this.getDeviceData();
         },
 
@@ -249,8 +249,7 @@ export default {
         },
 
         async deletePolicy(row) {
-            console.log("deletePolicy ", row.name);
-            const res = await policyApi.deletePolicyApi(row.name);
+            const res = await policyApi.deletePolicyApi({ role: row.role, deviceName: row.deviceName, operation: row.operation });
             this.getPolicyData();
         },
 

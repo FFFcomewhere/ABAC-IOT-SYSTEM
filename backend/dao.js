@@ -277,9 +277,9 @@ async function getPolicyList() {
     }
 }
 
-function deletePolicy(policy) {
+function deletePolicy(role, deviceName, operator) {
     const sql = `DELETE FROM policy WHERE v0 = ? && v1 = ? && v2 = ?`;
-    const value = [policy.v0, policy.v1, policy.v2];
+    const value = [role, deviceName, operator];
     connection.query(sql, value, (err, result) => {
         if (err) {
             console.error('Failed to Delete user:', err);
