@@ -203,7 +203,7 @@ async function getDeviceList() {
 }
 
 function updateDevice(device) {
-    const sql = `UPDATE device SET state = ?, power = ? WHERE name = ?`;
+    const sql = `UPDATE device  SET state = ?, power = ? WHERE name = ?`;
     const value = [device.state, device.power, device.name];
 
     connection.query(sql, value, (err, result) => {

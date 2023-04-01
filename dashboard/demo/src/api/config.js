@@ -24,7 +24,7 @@ Service.interceptors.request.use((config) => {
 Service.interceptors.response.use((response) => {
     //获取接口返回结果
     const res = response.data
-    if (res.status === 0) {
+    if (response.status === 200) {
         return res
     }
     else {

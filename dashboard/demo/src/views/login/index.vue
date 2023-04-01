@@ -7,7 +7,7 @@
         <h1>WELCOME</h1>
         <p>JOIN US!</p>
         <div class="img-box">
-          <img src="../assets/img/waoku.jpg" alt="" id="avatar" />
+          <img src="../../assets/img/waoku.jpg" alt="" id="avatar" />
         </div>
       </div>
       <!-- 注册盒子 -->
@@ -79,7 +79,8 @@ const loginForm = reactive({
 const registerForm = reactive({
   username: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
+  role: ''
 })
 
 const loginFormRef = ref('')
@@ -110,11 +111,9 @@ const login = () => {
     if (valid) {
       api.loginApi(loginForm).then(res => {
         console.log('login', res)
-        if (res.status === 0) {
-          ElMessage.success(res.message)
-          window.sessionStorage.setItem('token', res.token)
-          router.push('/home')
-        }
+        ElMessage.success(res.message)
+        window.sessionStorage.setItem('token', res)
+        router.push('/index')
       }).catch(error => {
         console.log(error);
       })
@@ -128,9 +127,7 @@ const register = () => {
   registerFormRef.value.validate((valid) => {
     if (valid) {
       api.registerApi(registerForm).then(res => {
-        if (res.status === 0) {
-          ElMessage.success(res.message)
-        }
+        ElMessage.success(res.message)
       }).catch(error => {
         console.log(error);
       })

@@ -16,6 +16,7 @@
     "node-csv": "^0.1.2",
     "pkg": "^5.8.0",
     "sequelize": "^6.28.1",
+    "socket.io": "^4.6.1",
     "web3": "^1.8.2"
   },
   "name": "backend",

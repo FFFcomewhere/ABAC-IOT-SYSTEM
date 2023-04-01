@@ -10,15 +10,15 @@ app
 
 ### 设备
 默认 root 拥有所有设备的读写权限 member 拥有所有设备的读权限
-1. addDevice(name, state, power)  添加设备   对应操作 write
+1. addDevice(name, state)  添加设备   对应操作 write
 2. deleteDevice(name) 删除设备 对应操作 write
 3. updateDevice(name, state) 更新设备 对应操作 write
 4. getDeviceInfo(name) 获取设备信息 对应操作 read
 5. getDeviceList() 获取设备列表 对应操作 read
 
 ### 策略
-1. addPolicy(role, deviceName, policy) 添加策略 
-2. deletePolicy(role, deviceName, policy) 删除策略
+1. addPolicy(role, deviceName, operation) 添加策略 
+2. deletePolicy(role, deviceName, operation) 删除策略
 3. getPolicyInfo(role, deviceName) 获取策略
 4. getPolicyList() 获取策略列表
 
@@ -27,13 +27,17 @@ app
 ### 用户
 1. 用户名 username 
 2. 密码 password 
-3. 读 readRole
-4. 写 writeRole 
+3. 权限 role
 
 ### 设备
 1. 设备名 name
 2. 设备状态 0/1 state
 3. 设备电量 0-100  power
+
+### 策略
+1. 角色 role
+2. 设备名 deviceName
+3. 策略 operation
 
 # 合约部分
 ## 成员变量

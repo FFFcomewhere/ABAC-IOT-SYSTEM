@@ -20,6 +20,7 @@ app.use(express.json());
 const cors = require('cors');
 console.log("cors");
 app.use(cors({
+    //origin: 'http://localhost:9999',
     origin: 'http://localhost:8080',
     credentials: true,
     optionsSuccessStatus: 200
@@ -38,18 +39,20 @@ async function server() {
     // });
 
     app.get('/', (req, res) => {
-        res.send('Hello World!')
+        res.send('Hello World!');
+        res.status(200).end();
     })
 
     //User
     app.post('/register', async (req, res) => {
         service.register(req.body.username, req.body.password, req.body.confirmPassword, req.body.role);
-        res.end();
+        res.status(200).end();
     })
 
     app.post('/login', async (req, res) => {
         const result = await service.login(req.body.username, req.body.password);
         res.json(result);
+        res.status(200).end();
     })
 
     app.post('/getUserInfo', auth.authenticateToken, async (req, res) => {
@@ -59,6 +62,7 @@ async function server() {
         }
         const result = await service.getUserInfo(req.body.username);
         res.json(result);
+        res.status(200).end();
     })
 
     app.get('/getUserList', auth.authenticateToken, async (req, res) => {
@@ -67,11 +71,12 @@ async function server() {
         }
         const result = await service.getUserList();
         res.json(result);
+        res.status(200).end();
     })
 
     //Device
     app.post('/addDevice', auth.authenticateToken, async (req, res) => {
-        service.addDevice(req.body.name, req.body.state, req.body.power);
+        service.addDevice(req.body.name, req.body.state);
         if (req.user && req.user.role == "root") {
             service.addPolicy(req.user.role, req.body.name, "write");
         }
@@ -80,7 +85,7 @@ async function server() {
     })
 
     app.post('/deleteDevice', auth.authenticateToken, async (req, res) => {
-        if (! await accessCtl.baseVerify(req.user.role, req.body.name, 'write')) {
+        if (! await (req.user.role != "root" || accessCtl.baseVerify(req.user.role, req.body.name, 'write'))) {
             res.status(400).send({ error: errorWithoutPermission });
         }
         service.deleteDevice(req.body.name);
@@ -88,7 +93,7 @@ async function server() {
     })
 
     app.post('/updateDevice', auth.authenticateToken, async (req, res) => {
-        if (! await accessCtl.baseVerify(req.user.role, req.body.name, 'write')) {
+        if (! await (accessCtl.baseVerify(req.user.role, req.body.name, 'write'))) {
             res.status(400).send({ error: errorWithoutPermission }).end();
             return;
         }
@@ -106,10 +111,10 @@ async function server() {
     })
 
     app.get('/getDeviceList', auth.authenticateToken, async (req, res) => {
-        if (! await accessCtl.baseVerify(req.user.role, req.body.name, 'read')) {
-            res.status(400).send({ error: errorWithoutPermission }).end();
-            return;
-        }
+        // if (! await (req.user.role != "root" || accessCtl.baseVerify(req.user.role, req.body.name, 'read'))) {
+        //     res.status(400).send({ error: errorWithoutPermission }).end();
+        //     return;
+        // }
         const result = await service.getDeviceList();
         res.json(result);
     })
@@ -121,7 +126,7 @@ async function server() {
             res.status(400).send({ error: errorWithoutPermission }).end();
             return;
         }
-        service.addPolicy(req.body.role, req.body.deviceName, req.body.policy);
+        service.addPolicy(req.body.role, req.body.deviceName, req.body.operation);
         await accessCtl.loadPolicy();
         res.status(200).end();
     })

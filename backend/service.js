@@ -58,8 +58,8 @@ async function getUserList() {
     return userList;
 }
 
-function addDevice(name, state, power) {
-    const device = new dao.Device(name, state, power);
+function addDevice(name, state) {
+    const device = new dao.Device(name, state, 100);
     dao.createDevice(device);
 }
 
@@ -67,11 +67,12 @@ function deleteDevice(name) {
     dao.deleteDevice(name);
 }
 
-function updateDevice(name, state) {
-    let device = dao.getDeviceInfo(name);
-    device.name = name;
-    device.state = state;
-    dao.updateDevice(device);
+async function updateDevice(name, state) {
+    const device = await dao.getDeviceInfo(name);
+    console.log("newdevice", device[0]);
+    device[0].name = name;
+    device[0].state = state;
+    dao.updateDevice(device[0]);
 }
 
 async function getDeviceInfo(name) {
@@ -99,7 +100,17 @@ async function getPolicyInfo(role, deviceName) {
 }
 
 async function getPolicyList() {
-    const policyList = await dao.getPolicyList();
+    let policyList = await dao.getPolicyList();
+
+    //只保留policy的v0, v1, v2
+    for (let i = 0; i < policyList.length; i++) {
+        policyList[i] = {
+            role: policyList[i].v0,
+            deviceName: policyList[i].v1,
+            operation: policyList[i].v2
+        }
+    }
+
     return policyList;
 }
 
