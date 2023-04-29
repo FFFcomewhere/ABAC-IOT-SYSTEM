@@ -84,7 +84,9 @@ async function server() {
     })
 
     app.post('/deleteDevice', auth.authenticateToken, async (req, res) => {
-        if (! await (req.user.role != "root" || accessCtl.baseVerify(req.user.role, req.body.name, 'write'))) {
+        // console.log("req.user.role", req.user.role != "root");
+        // console.log("bool ", await accessCtl.baseVerify(req.user.role, req.body.name, 'write'));
+        if (! await (req.user.role == "root" || accessCtl.baseVerify(req.user.role, req.body.name, 'write'))) {
             res.status(400).send({ error: errorWithoutPermission });
         }
         service.deleteDevice(req.body.name);
