@@ -67,6 +67,7 @@ async function server() {
     app.get('/getUserList', auth.authenticateToken, async (req, res) => {
         if (req.user.role != "root") {
             res.status(400).send({ error: errorWithoutPermission });
+            return;
         }
         const result = await service.getUserList();
         res.json(result);
@@ -83,12 +84,12 @@ async function server() {
         res.status(200).end();
     })
 
-    app.post('/deleteDevice', auth.authenticateToken, async (req, res) => {
-        // console.log("req.user.role", req.user.role != "root");
-        // console.log("bool ", await accessCtl.baseVerify(req.user.role, req.body.name, 'write'));
+    app.post('/deleteDevice', auth.authenticateToken, async (req, res) => { 
         if (! await (req.user.role == "root" || accessCtl.baseVerify(req.user.role, req.body.name, 'write'))) {
-            res.status(400).send({ error: errorWithoutPermission });
+            res.status(400).send({ error: errorWithoutPermission }).end();
+            return;
         }
+
         service.deleteDevice(req.body.name);
         res.status(200).end();
     })
