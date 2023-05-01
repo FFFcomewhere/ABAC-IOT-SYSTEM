@@ -66,3 +66,10 @@ database name: base1
 ## 部署与启动合约
 1. truffle migrate --network ganache
 2. truffle 
+
+
+## 
+dockerk开启mysql 和 ganache  docker start iot-mysql / docker start ganache
+后端 npm run start 
+前端 npm run serve
+智能合约  truffle migrate --network ganache
