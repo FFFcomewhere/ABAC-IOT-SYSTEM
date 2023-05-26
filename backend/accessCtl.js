@@ -105,6 +105,7 @@ async function loadPolicy() {
     // 存储MPT的根哈希到链上
     const hash = await getRootHash();
     await attributes.setRootHash(hash);
+    //console.log("attributes init over");
 }
 
 async function getPolicy() {
@@ -139,8 +140,8 @@ async function baseVerify(role, deviceName, operator) {
 
     const hash = await getRootHash();
     const contractHash = await attributes.getRootHash();
-    console.log("hash", hash);
-    console.log("contractHash", contractHash);
+    console.log("hash", Buffer.from(hash).toString('hex'));
+    console.log("contractHash", Buffer.from(contractHash).toString('hex'));
     return hash == contractHash;
 }
 

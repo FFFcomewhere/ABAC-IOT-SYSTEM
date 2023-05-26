@@ -11,6 +11,7 @@ app
 2. register(username, password, role) 注册 root/member
 3. getUserInfo(username) 获取用户信息
 4. getUserList() 获取用户列表
+5. 
 
 ### 设备
 默认 root 拥有所有设备的读写权限 member 拥有所有设备的读权限
@@ -63,13 +64,16 @@ app
 
 database name: base1
 
+ganache : docker run --name ganache -p 8545:8545 trufflesuite/ganache-cli 
+
+
 ## 部署与启动合约
 1. truffle migrate --network ganache
 2. truffle 
 
 
-## 
+## 开启设备
 dockerk开启mysql 和 ganache  docker start iot-mysql / docker start ganache
+智能合约  truffle migrate --network ganache
 后端 npm run start 
 前端 npm run serve
-智能合约  truffle migrate --network ganache

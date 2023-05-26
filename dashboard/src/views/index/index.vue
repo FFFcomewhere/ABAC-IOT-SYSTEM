@@ -114,12 +114,12 @@ import policyApi from '@/api/policy.js'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { onMounted } from '@vue/runtime-core'
-
-
+import { ElMessageBox } from 'element-plus';
 
 export default {
     data() {
         return {
+            errorMessage: 0,
             deviceData: [],
             addDialogVisible: false,
             updateDialogVisible: false,
@@ -206,7 +206,17 @@ export default {
 
         async deleteDevice(row) {
             console.log("deleteDevice ", row.name);
-            const res = await deviceApi.deleteDeviceApi({ name: row.name });
+            try {
+                const res = await deviceApi.deleteDeviceApi({ name: row.name });
+            } catch (error) {
+                if (error.response.status != 200) {
+                    this.errorMessage = error.response.data.error;
+                    ElMessageBox.alert(this.errorMessage, '错误提示', {
+                        confirmButtonText: '已知晓',
+                        type: 'error',
+                    });
+                }
+            }
             this.getDeviceData();
         },
 
@@ -252,7 +262,18 @@ export default {
         },
 
         async deletePolicy(row) {
-            const res = await policyApi.deletePolicyApi({ role: row.role, deviceName: row.deviceName, operation: row.operation });
+            try {
+                const res = await policyApi.deletePolicyApi({ role: row.role, deviceName: row.deviceName, operation: row.operation });
+            } catch (error) {
+                if (error.response.status != 200) {
+                    this.errorMessage = error.response.data.error;
+                    ElMessageBox.alert(this.errorMessage, '错误提示', {
+                        confirmButtonText: '已知晓',
+                        type: 'error',
+                    });
+                }
+            }
+
             this.getPolicyData();
         },
 

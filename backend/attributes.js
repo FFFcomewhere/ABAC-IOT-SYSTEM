@@ -9,7 +9,7 @@ module.exports = {
     setRootHash: setRootHash,
     getRootHash: getRootHash
 }
-
+const gasLimit = 300000;
 async function init() {
     //初始化合约
     const id = await web3.eth.net.getId();
@@ -20,7 +20,13 @@ async function init() {
 
 async function setRootHash(hash) {
     console.log("accounts", accounts[0]);
-    contract.methods.setRootHash(hash).send({ from: accounts[0] });;
+    //console.log(" init setRootHash begin");
+    const options = {
+      from: accounts[0],
+      gas: gasLimit // 添加 gas 限制参数
+    };
+    contract.methods.setRootHash(hash).send(options);;
+    //console.log(" init setRootHash end");
 }
 
 async function getRootHash() {
